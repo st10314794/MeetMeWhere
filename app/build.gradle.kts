@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.kapt")
+    // Add the dependency for the Google services Gradle plugin
+//    id("com.google.gms.google-services") version "4.4.2" apply false
+
 }
 
 android {
@@ -48,6 +51,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    //implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -56,4 +60,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     kapt("androidx.room:room-compiler:2.5.2")
     implementation ("androidx.room:room-ktx:2.5.2")
+
+    //Addeded
+//    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+//    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+//    implementation("com.google.firebase:firebase-analytics")
+
 }

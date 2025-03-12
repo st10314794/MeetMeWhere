@@ -15,6 +15,7 @@ import com.example.meetmewhere.databinding.ActivityMainBinding
 class EventDetails : AppCompatActivity() {
     //Declare variable for binding project
     private lateinit var binding: ActivityEventDetailsBinding
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -24,6 +25,18 @@ class EventDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        db = AppDatabase.getDatabase(applicationContext)
+
+
+
+
+        val username = intent.getStringExtra("username")
+
+        if (username !=null){
+            binding.tvWelcomeMessage.text = "Welcome ${username}"
+        }else{
+            binding.tvWelcomeMessage.text = "Welcome"
+        }
 
 //        val datePicker : DatePicker = binding.datePicker
 //        val today = Calendar.getInstance()
@@ -38,6 +51,7 @@ class EventDetails : AppCompatActivity() {
         binding.editTextText3.setOnClickListener{
             showDatePicker()
         }
+
         binding.saveButton.setOnClickListener{
 
             if(binding.editTextTextEventTitle.text.toString().isEmpty()){
@@ -68,6 +82,13 @@ class EventDetails : AppCompatActivity() {
             val date = "$selectedDay/${selectedMonth + 1}/$selectedYear"
             binding.editTextText3.setText(date) // Show selected date in EditText
         }, year, month, day).show()
+    }
+
+
+    private fun addEvent(title:String, desc : String, date: String, time: String, location: String){
+        val event = Events(title = title, description = desc, date = date, time = time, location = location)
+
+        db.eventsDao().insertEvent(event)
     }
 }
 

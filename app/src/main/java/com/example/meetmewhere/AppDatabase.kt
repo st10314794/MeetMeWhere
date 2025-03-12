@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Events::class], version = 2, exportSchema = false)
+@Database(entities = [Events::class, Users::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase()
 {
   abstract fun eventsDao(): EventsDAO
+  abstract fun usersDao(): UsersDAO
 
   companion object{
       @Volatile
@@ -24,7 +25,8 @@ abstract class AppDatabase : RoomDatabase()
                   //Converts class from kotlin to java
                   AppDatabase::class.java,
                   "meetmewhere_database"
-              ).build()
+              ) .fallbackToDestructiveMigration()
+                  .build()
               INSTANCE = instance
               instance
           }

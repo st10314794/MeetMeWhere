@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     //Declare variable for binding project
     private lateinit var binding: ActivityMainBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,10 +34,16 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "You have logged in successfully", Toast.LENGTH_SHORT).show()
 
                 val eventIntent = Intent(this, EventDetails::class.java)
+                eventIntent.putExtra("username",username)
                 startActivity(eventIntent)
             }else{
                 Toast.makeText(this,"Invalid login details",Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.buttonSignUp.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 }
