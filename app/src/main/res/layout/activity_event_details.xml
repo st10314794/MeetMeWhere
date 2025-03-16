@@ -60,14 +60,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
 
-<!--    -->
-<!--    <DatePicker-->
-<!--        android:id="@+id/datePicker"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:datePickerMode="calendar"-->
+    <!--    -->
+    <!--    <DatePicker-->
+    <!--        android:id="@+id/datePicker"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:datePickerMode="calendar"-->
 
-<!--        />-->
+    <!--        />-->
     <TextView
         android:id="@+id/textViewLocation"
         android:layout_width="wrap_content"
@@ -163,22 +163,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewViewEvents"
-        android:layout_width="60dp"
-        android:layout_height="71dp"
-        app:srcCompat="@drawable/baseline_arrow_circle_right_24"
-        tools:layout_editor_absoluteX="335dp"
-        tools:layout_editor_absoluteY="625dp" />
-
-    <TextView
-        android:id="@+id/textView2"
+    <Button
+        android:id="@+id/buttonViewEvents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="155dp"
         android:text="View Events"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="287dp"
-        tools:layout_editor_absoluteY="598dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

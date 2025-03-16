@@ -1,8 +1,10 @@
 package com.example.meetmewhere
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.util.Log
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +13,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.meetmewhere.databinding.ActivityEventDetailsBinding
 import com.example.meetmewhere.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 class EventDetails : AppCompatActivity() {
     //Declare variable for binding project
@@ -26,9 +32,6 @@ class EventDetails : AppCompatActivity() {
         setContentView(binding.root)
 
         db = AppDatabase.getDatabase(applicationContext)
-
-
-
 
         val username = intent.getStringExtra("username")
 
@@ -52,15 +55,50 @@ class EventDetails : AppCompatActivity() {
             showDatePicker()
         }
 
+
+
         binding.saveButton.setOnClickListener{
+            val title = binding.editTextTextEventTitle.text.toString()
+            val desc = binding.editTextTextMultiLine.text.toString()
+            val date = binding.editTextText3.text.toString()
+            val location = binding.editTextText4.text.toString()
 
             if(binding.editTextTextEventTitle.text.toString().isEmpty()){
                 binding.editTextTextEventTitle.error = "Title is required"
                 return@setOnClickListener
-            }else{
-                Toast.makeText(this,"Successfully saved",Toast.LENGTH_SHORT).show()
             }
+
+            if(desc.isEmpty()) {
+                binding.editTextTextMultiLine.error = "Description is required"
+                return@setOnClickListener
+            }
+
+
+            if(binding.editTextText3.text.toString().isEmpty()) {
+                binding.editTextText3.error = "Date is required"
+                return@setOnClickListener
+            }
+
+
+            if(binding.editTextText4.text.toString().isEmpty()) {
+                binding.editTextText4.error = "Location is required"
+                return@setOnClickListener
+            }
+
+
+
+                addEvent(title, desc, date, date, location)
+                Toast.makeText(this,"Successfully saved",Toast.LENGTH_SHORT).show()
+
         }
+
+
+        //ImageView button --> screen to display events
+        binding.buttonViewEvents.setOnClickListener{
+            val eventDisplayIntent = Intent(this, EventsDisplayActivity::class.java)
+            startActivity(eventDisplayIntent)
+        }
+
 
     }
     private fun showDatePicker(){
@@ -88,7 +126,20 @@ class EventDetails : AppCompatActivity() {
     private fun addEvent(title:String, desc : String, date: String, time: String, location: String){
         val event = Events(title = title, description = desc, date = date, time = time, location = location)
 
-        db.eventsDao().insertEvent(event)
+        CoroutineScope(Dispatchers.IO).launch {
+            db.eventsDao().insertEvent(event)
+
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val events = db.eventsDao().getAllEvents()  // Create a synchronous version of the query
+                runOnUiThread {
+                    Log.d("EventDetails", "Fetched events: $events")
+
+                }
+            }
+
+        }
+
     }
 }
 
