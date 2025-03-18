@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.meetmewhere.databinding.ActivityLoginBinding
-
-//import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     //Declare variable for binding project
     private lateinit var binding: ActivityLoginBinding
 
-//    private lateinit var auth: FirebaseAuth
+    private lateinit var auth: FirebaseAuth
 
     private lateinit var db: AppDatabase
 
@@ -29,9 +29,10 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // Initialize Firebase Auth
-//        auth = Firebase.auth
-        //  auth = FirebaseAuth.getInstance()
+        auth = Firebase.auth
+
 
         db = AppDatabase.getDatabase(applicationContext)
 
@@ -55,6 +56,8 @@ class LoginActivity : AppCompatActivity() {
 
 
             createNewUser(name, email, password)
+//            createNewUserFirebase(email, password)
+            createNewUserFirebase(email, password)
 
             val eventIntent = Intent(this, EventDetails::class.java)
             eventIntent.putExtra("username", name)
@@ -104,6 +107,29 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+//    private fun createNewUserFireBase(email: String, password: String) {
+//        auth.createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener(this) { task ->
+//                if (task.isSuccessful) {
+//                    // Sign in success, update UI with the signed-in user's information
+//                    Log.d(TAG, "createUserWithEmail:success")
+//                    val user = auth.currentUser
+//                    //Intent --> next screen (event)
+//
+//                    //updateUI(user)
+//                } else {
+//                    // If sign in fails, display a message to the user.
+//                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
+//                    Toast.makeText(
+//                        baseContext,
+//                        "Authentication failed.",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
+//                    // updateUI(null)
+//                }
+//            }
+//    }
+
     private fun createNewUser(username: String, email: String, password: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val existingUser = db.usersDao().getUserByUsername(username)
@@ -111,7 +137,11 @@ class LoginActivity : AppCompatActivity() {
             if (existingUser != null) {
                 // Switch to the main thread to show a Toast
                 launch(Dispatchers.Main) {
-                    Toast.makeText(this@LoginActivity, "This user already exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "This user already exists",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 val user = Users(name = username, email = email, password = password)
@@ -119,12 +149,31 @@ class LoginActivity : AppCompatActivity() {
 
                 // Switch to the main thread to show a success message
                 launch(Dispatchers.Main) {
-                    Toast.makeText(this@LoginActivity, "Registration Successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Registration Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
+
+
+    private fun createNewUserFirebase(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                } else {
+                    Toast.makeText(this@LoginActivity, "Registration Failed", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+    }
 }
+
+
 
 
 

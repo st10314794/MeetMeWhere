@@ -2,6 +2,7 @@ package com.example.meetmewhere
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -28,7 +29,13 @@ class MainActivity : AppCompatActivity() {
         //setting the activities content view to the root view of the binding
         setContentView(binding.root)
 
-        db = AppDatabase.getDatabase(applicationContext)
+//        db = AppDatabase.getDatabase(applicationContext)
+
+        try {
+            db = AppDatabase.getDatabase(applicationContext)
+        } catch (e: Exception) {
+            Log.e("DatabaseError", "Error initializing database", e)
+        }
 
 //        val username = "user"
 //        val password = "pass"
