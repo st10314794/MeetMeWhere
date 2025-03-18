@@ -27,16 +27,17 @@ class EventsDisplayActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(applicationContext)
 
-        adapter = EventAdapter(emptyList())
+        adapter = EventAdapter(emptyList(), onEditClick = {event -> editEvent(event) }, onDeleteClick = {event -> deleteEvent(event) })
         binding.rvEvents.layoutManager = LinearLayoutManager(this)
         binding.rvEvents.adapter = adapter
 
 
         getEvents()
+//      getEventsHardCode()
 
-//        getEventsHardCode()
 
-        }
+
+        }//end onCreate
 
 //    private fun getEvents() {
 //        CoroutineScope(Dispatchers.IO).launch {
@@ -55,6 +56,19 @@ class EventsDisplayActivity : AppCompatActivity() {
             adapter.updateEvents(events)
         }
     }
+    private fun editEvent(event: Events){
+
+    }
+    private fun deleteEvent(event: Events){
+        CoroutineScope(Dispatchers.IO).launch{
+            db.eventsDao().deleteEvent(event)
+            runOnUiThread{
+                getEvents()
+            }
+        }
+    }
+
+
 
     private fun getEventsHardCode() {
         // Hardcoded list of events for testing
