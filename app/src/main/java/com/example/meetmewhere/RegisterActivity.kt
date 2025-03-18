@@ -1,13 +1,10 @@
 package com.example.meetmewhere
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.meetmewhere.databinding.ActivityLoginBinding
+import com.example.meetmewhere.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -15,9 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class LoginActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
     //Declare variable for binding project
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityRegisterBinding
 
     private lateinit var auth: FirebaseAuth
 
@@ -26,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Inflate the layout using the binding class
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
@@ -138,7 +135,7 @@ class LoginActivity : AppCompatActivity() {
                 // Switch to the main thread to show a Toast
                 launch(Dispatchers.Main) {
                     Toast.makeText(
-                        this@LoginActivity,
+                        this@RegisterActivity,
                         "This user already exists",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -150,7 +147,7 @@ class LoginActivity : AppCompatActivity() {
                 // Switch to the main thread to show a success message
                 launch(Dispatchers.Main) {
                     Toast.makeText(
-                        this@LoginActivity,
+                        this@RegisterActivity,
                         "Registration Successful",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -166,7 +163,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                 } else {
-                    Toast.makeText(this@LoginActivity, "Registration Failed", Toast.LENGTH_SHORT)
+                    Toast.makeText(this@RegisterActivity, "Registration Failed", Toast.LENGTH_SHORT)
                         .show()
                 }
             }

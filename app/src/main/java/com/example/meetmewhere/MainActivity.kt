@@ -1,14 +1,15 @@
 package com.example.meetmewhere
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.meetmewhere.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     //Declare variable for binding project
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: AppDatabase
+    private lateinit var auth:FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 //        db = AppDatabase.getDatabase(applicationContext)
+        auth = Firebase.auth
 
         try {
             db = AppDatabase.getDatabase(applicationContext)
@@ -41,10 +44,11 @@ class MainActivity : AppCompatActivity() {
 //        val password = "pass"
 
         binding.loginButton.setOnClickListener{
-           val enteredUsername = binding.editTextTextUsername.text.toString()
+           val enteredEmail = binding.editTextTextEmail.text.toString()
             val enteredPassword = binding.editTextTextPassword.text.toString()
             //login call here
-            loginUser(enteredUsername, enteredPassword)
+//            loginUser(enteredUsername, enteredPassword)
+            loginUserFireBase(enteredEmail, enteredPassword)
 //            if ((enteredUsername == username) && (enteredPassword == password)) {
 //                Toast.makeText(this, "You have logged in successfully", Toast.LENGTH_SHORT).show()
 //
@@ -57,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.buttonSignUp.setOnClickListener{
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
     }
@@ -96,4 +100,34 @@ class MainActivity : AppCompatActivity() {
             }//endrunonui
         }//end corrouteine
     }//end of login user
+
+
+    private fun loginUserFireBase(email : String, password: String){
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "You have logged in successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithEmail:success")
+                    val user = auth.currentUser
+                    val eventIntent = Intent(this@MainActivity, EventDetails::class.java)
+                    eventIntent.putExtra("email",email)
+                    startActivity(eventIntent)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext,
+                        "Authentication failed.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+
+                }
+            }
+
+    }
 }

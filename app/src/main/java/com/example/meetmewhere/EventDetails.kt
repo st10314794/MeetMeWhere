@@ -33,10 +33,10 @@ class EventDetails : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(applicationContext)
 
-        val username = intent.getStringExtra("username")
+        val email = intent.getStringExtra("email")
 
-        if (username !=null){
-            binding.tvWelcomeMessage.text = "Welcome ${username}"
+        if (email !=null){
+            binding.tvWelcomeMessage.text = "Welcome ${email}"
         }else{
             binding.tvWelcomeMessage.text = "Welcome"
         }

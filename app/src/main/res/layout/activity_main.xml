@@ -8,13 +8,13 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/editTextTextUsername"
+        android:id="@+id/editTextTextEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="234dp"
         android:ems="10"
-        android:hint="Username"
+        android:hint="email"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmail" />
 
     <Button
         android:id="@+id/loginButton"
