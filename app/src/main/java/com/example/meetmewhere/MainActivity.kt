@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.meetmewhere.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -31,39 +32,56 @@ class MainActivity : AppCompatActivity() {
         //setting the activities content view to the root view of the binding
         setContentView(binding.root)
 
-//        db = AppDatabase.getDatabase(applicationContext)
-        auth = Firebase.auth
 
-        try {
-            db = AppDatabase.getDatabase(applicationContext)
-        } catch (e: Exception) {
-            Log.e("DatabaseError", "Error initializing database", e)
+        replaceFragment(EventsFragment())
+
+        binding.bottomNav.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.events_menu -> replaceFragment(EventsFragment())
+                R.id.addEvent_menu -> replaceFragment(EventCreationFragment())
+                R.id.profile_menu -> replaceFragment(ProfileFragment())
+            }
+            true
         }
 
-//        val username = "user"
-//        val password = "pass"
-
-        binding.loginButton.setOnClickListener{
-           val enteredEmail = binding.editTextTextEmail.text.toString()
-            val enteredPassword = binding.editTextTextPassword.text.toString()
-            //login call here
-//            loginUser(enteredUsername, enteredPassword)
-            loginUserFireBase(enteredEmail, enteredPassword)
-//            if ((enteredUsername == username) && (enteredPassword == password)) {
-//                Toast.makeText(this, "You have logged in successfully", Toast.LENGTH_SHORT).show()
+////        db = AppDatabase.getDatabase(applicationContext)
+//        auth = Firebase.auth
 //
-//                val eventIntent = Intent(this, EventDetails::class.java)
-//                eventIntent.putExtra("username",username)
-//                startActivity(eventIntent)
-//            }else{
-//                Toast.makeText(this,"Invalid login details",Toast.LENGTH_SHORT).show()
-//            }
-        }
+//        try {
+//            db = AppDatabase.getDatabase(applicationContext)
+//        } catch (e: Exception) {
+//            Log.e("DatabaseError", "Error initializing database", e)
+//        }
+//
+////        val username = "user"
+////        val password = "pass"
+//
+//        binding.loginButton.setOnClickListener{
+//           val enteredEmail = binding.editTextTextEmail.text.toString()
+//            val enteredPassword = binding.editTextTextPassword.text.toString()
+//            //login call here
+////            loginUser(enteredUsername, enteredPassword)
+//            loginUserFireBase(enteredEmail, enteredPassword)
+////            if ((enteredUsername == username) && (enteredPassword == password)) {
+////                Toast.makeText(this, "You have logged in successfully", Toast.LENGTH_SHORT).show()
+////
+////                val eventIntent = Intent(this, EventDetails::class.java)
+////                eventIntent.putExtra("username",username)
+////                startActivity(eventIntent)
+////            }else{
+////                Toast.makeText(this,"Invalid login details",Toast.LENGTH_SHORT).show()
+////            }
+//        }
+//
+//        binding.buttonSignUp.setOnClickListener{
+//            val intent = Intent(this, RegisterActivity::class.java)
+//            startActivity(intent)
+//        }
+    }
 
-        binding.buttonSignUp.setOnClickListener{
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
+    private fun replaceFragment(fragment: Fragment){
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, fragment).commit()
     }
 
     private fun loginUser(username: String, password: String){
