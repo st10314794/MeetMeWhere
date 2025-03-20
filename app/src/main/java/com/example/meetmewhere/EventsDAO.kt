@@ -12,7 +12,7 @@ import androidx.room.Query
 @Dao
 interface EventsDAO{
     @Insert
-    fun insertEvent(events: Events)
+    fun insertEvent(events: Events): Long
 
     @Query("SELECT * FROM events")
     fun getAllEvents(): LiveData<List<Events>>

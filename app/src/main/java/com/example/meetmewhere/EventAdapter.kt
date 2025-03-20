@@ -38,6 +38,8 @@ class EventAdapter (private var eventList: List<Events>, private val onEditClick
       holder.bind(eventList[position], onEditClick, onDeleteClick)
     }
 
+    
+
     override fun getItemCount(): Int  =  eventList.size
 
 

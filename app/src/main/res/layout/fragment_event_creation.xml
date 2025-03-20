@@ -55,7 +55,7 @@
         android:text="Date"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+        app:layout_constraintTop_toBottomOf="@+id/edtDescription" />
 
 
     <TextView
@@ -68,7 +68,7 @@
         android:text="Location"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/edtDate" />
 
     <EditText
         android:id="@+id/editTextTextEventTitle"
@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewEventTitle" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/edtDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -102,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewEventDescription" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/edtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -117,7 +117,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/edtLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -139,7 +139,7 @@
         android:layout_marginTop="18dp"
         android:text="Save"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/edtLocation" />
 
     <TextView
         android:id="@+id/tvWelcomeMessage"
