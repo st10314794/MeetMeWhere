@@ -3,26 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/eventsFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.meetmewhere.FirstFragment"
+        android:id="@+id/eventsFragment"
+        android:name="com.example.meetmewhere.EventsFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_events">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_EventsFragment_to_EventCreationFragment"
+            app:destination="@id/eventCreationFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.meetmewhere.SecondFragment"
+        android:id="@+id/eventCreationFragment"
+        android:name="com.example.meetmewhere.EventCreationFragment"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/fragment_event_creation">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/eventsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.meetmewhere.ProfileFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_profile"/>
 </navigation>

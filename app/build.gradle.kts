@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.navigation.fragment)
     //implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -75,5 +76,9 @@ dependencies {
 
     // Add the dependencies for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
+
+    //Added
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.6.0") // or the latest version
+    implementation ("androidx.navigation:navigation-ui-ktx:2.6.0") // or the latest version
 
 }

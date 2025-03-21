@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.meetmewhere.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -33,16 +34,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        replaceFragment(EventsFragment())
+//        replaceFragment(EventsFragment())
+//
+//        binding.bottomNav.setOnItemSelectedListener {
+//            when(it.itemId){
+//                R.id.events_menu -> replaceFragment(EventsFragment())
+//                R.id.addEvent_menu -> replaceFragment(EventCreationFragment())
+//                R.id.profile_menu -> replaceFragment(ProfileFragment())
+//            }
+//            true
+//        }
 
         binding.bottomNav.setOnItemSelectedListener {
-            when(it.itemId){
-                R.id.events_menu -> replaceFragment(EventsFragment())
-                R.id.addEvent_menu -> replaceFragment(EventCreationFragment())
-                R.id.profile_menu -> replaceFragment(ProfileFragment())
+            when (it.itemId) {
+                R.id.events_menu -> findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.eventsFragment)
+                R.id.addEvent_menu -> findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.eventCreationFragment)
+                R.id.profile_menu -> findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.profileFragment)
             }
             true
         }
+
 
 ////        db = AppDatabase.getDatabase(applicationContext)
 //        auth = Firebase.auth
@@ -79,10 +90,19 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
-    private fun replaceFragment(fragment: Fragment){
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout, fragment).commit()
+//    private fun replaceFragment(fragment: Fragment){
+//        val fragmentTransaction = supportFragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id.frameLayout, fragment).commit()
+//    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        // Get the NavController from the NavHostFragment
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+        // Navigate to the specified fragment
+        navController.navigate(R.id.action_EventsFragment_to_EventCreationFragment) // Use appropriate action ID from nav_graph
     }
+
 
     private fun loginUser(username: String, password: String){
         CoroutineScope(Dispatchers.IO).launch {

@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.meetmewhere.databinding.FragmentEventCreationBinding
 import com.example.meetmewhere.databinding.FragmentEventsBinding
 import kotlinx.coroutines.CoroutineScope
@@ -21,11 +22,15 @@ class EventCreationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var db: AppDatabase
+    private var event: Events? = null // To hold the event when editing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         db = AppDatabase.getDatabase(requireContext())
+
+        // Check if the event is passed (for editing)
+        event = arguments?.getSerializable("event") as? Events
 
     }
 
@@ -43,6 +48,16 @@ class EventCreationFragment : Fragment() {
         binding.edtDate.setOnClickListener{
             showDatePicker()
         }
+
+        if (event != null) {
+            binding.editTextTextEventTitle.setText(event?.title)
+            binding.edtDescription.setText(event?.description)
+            binding.edtDate.setText(event?.date)
+            binding.edtLocation.setText(event?.location)
+
+            binding.saveButton.text = "Update Event" // Change button text for update
+        }
+
 
 
 
@@ -75,9 +90,18 @@ class EventCreationFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            addEvent(title, desc, date, date, location)
+
+            // Add or update the event
+            if (event != null) {
+                updateEvent(event!!, title, desc, date, location)
+            } else {
+                addEvent(title, desc, date, date, location)
+            }
+//            addEvent(title, desc, date, date, location)
         }
     }
+
+
 
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
@@ -111,4 +135,33 @@ class EventCreationFragment : Fragment() {
             }
         }
     }
+
+
+//    private fun updateEvent(event: Events, title: String, desc: String, date: String, location: String) {
+//
+//    }
+private fun updateEvent(event: Events, title: String, desc: String, date: String, location: String) {
+    val updatedEvent = event.copy(
+        title = title,
+        description = desc,
+        date = date,
+        location = location
+    )
+
+    CoroutineScope(Dispatchers.IO).launch {
+        try {
+            db.eventsDao().editEvent(updatedEvent)  // This will update the event in the DB
+            requireActivity().runOnUiThread {
+                Toast.makeText(requireContext(), "Event updated successfully!", Toast.LENGTH_SHORT).show()
+                findNavController().navigateUp() // Go back after updating
+            }
+        } catch (e: Exception) {
+            requireActivity().runOnUiThread {
+                Toast.makeText(requireContext(), "Failed to update event!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
+
+
 }

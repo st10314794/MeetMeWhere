@@ -5,6 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meetmewhere.databinding.ActivityEventsDisplayBinding
 import kotlinx.coroutines.CoroutineScope
@@ -27,9 +30,12 @@ class EventsDisplayActivity : AppCompatActivity() {
 
         db = AppDatabase.getDatabase(applicationContext)
 
-        adapter = EventAdapter(emptyList(), onEditClick = {event -> editEvent(event) }, onDeleteClick = {event -> deleteEvent(event) })
-        binding.rvEvents.layoutManager = LinearLayoutManager(this)
-        binding.rvEvents.adapter = adapter
+        //Commented out because of error
+//        val navController = findNavController()
+//
+//        adapter = EventAdapter(emptyList(), navController, onEditClick = {event -> editEvent(event) }, onDeleteClick = {event -> deleteEvent(event) })
+//        binding.rvEvents.layoutManager = LinearLayoutManager(this)
+//        binding.rvEvents.adapter = adapter
 
 
         getEvents()

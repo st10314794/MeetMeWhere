@@ -1,10 +1,12 @@
 package com.example.meetmewhere
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.meetmewhere.databinding.FragmentEventsBinding
 import kotlinx.coroutines.CoroutineScope
@@ -41,10 +43,11 @@ class EventsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        val navController = findNavController()  // Get NavController from Fragment
 
         //Initialis erecyclverview
-        eventAdapter = EventAdapter(emptyList(), onEditClick = {event -> editEvent(event) }, onDeleteClick = {event -> deleteEvent(event) })
+        //Added Navcontroller when creating eventadapter
+        eventAdapter = EventAdapter(emptyList(), navController, onEditClick = {event -> openEditEventFragment(event) }, onDeleteClick = {event -> deleteEvent(event) })
         binding.rvEvents.layoutManager = LinearLayoutManager(requireContext())
         binding.rvEvents.adapter = eventAdapter
 
@@ -66,9 +69,29 @@ class EventsFragment : Fragment() {
             eventAdapter.updateEvents(events)
         }
     }
-    private fun editEvent(event: Events) {
-        TODO("Not yet implemented")
+//    private fun editEvent(event: Events) {
+//       CoroutineScope(Dispatchers.IO).launch{
+//           db.eventsDao().editEvent(event)
+//           requireActivity().runOnUiThread{
+//               getEvents()
+//           }
+//       }
+//    }
+
+    private fun openEditEventFragment(event: Events) {
+        // Pass the selected event to EditEventFragment using a Bundle
+        val bundle = Bundle().apply {
+            putSerializable("event", event)  // Pass the event as Serializable
+        }
+
+        Log.d("NavigationDebug", "Navigating to EventCreationFragment with event: $event")
+        // Navigate to EditEventFragment
+//        findNavController().navigate(R.id.action_EventsFragment_to_EventCreationFragment, bundle)
+
+        val navController = findNavController()
+        navController.navigate(R.id.action_EventsFragment_to_EventCreationFragment, bundle)
     }
+
 
     private fun deleteEvent(event: Events) {
         CoroutineScope(Dispatchers.IO).launch{
