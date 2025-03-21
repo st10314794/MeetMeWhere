@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.meetmewhere.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
@@ -54,9 +55,9 @@ class RegisterActivity : AppCompatActivity() {
 
             createNewUser(name, email, password)
 //            createNewUserFirebase(email, password)
-            createNewUserFirebase(email, password)
+            createNewUserFirebase(name, email, password)
 
-            val eventIntent = Intent(this, EventDetails::class.java)
+            val eventIntent = Intent(this, MainActivity::class.java)
             eventIntent.putExtra("username", name)
             startActivity(eventIntent)
 //
@@ -157,11 +158,33 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-    private fun createNewUserFirebase(email: String, password: String) {
+//    private fun createNewUserFirebase(email: String, password: String) {
+//        auth.createUserWithEmailAndPassword(email, password)
+//            .addOnCompleteListener(this) { task ->
+//                if (task.isSuccessful) {
+//                    val user = auth.currentUser
+//                } else {
+//                    Toast.makeText(this@RegisterActivity, "Registration Failed", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//            }
+//    }
+
+    private fun createNewUserFirebase(name: String, email: String, password: String) {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val user = auth.currentUser
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(name)
+                        .build()
+                    user?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener{ updateTask ->
+                            if (updateTask.isSuccessful) {
+                                Toast.makeText(this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT).show()
+
+                            }
+                        }
                 } else {
                     Toast.makeText(this@RegisterActivity, "Registration Failed", Toast.LENGTH_SHORT)
                         .show()

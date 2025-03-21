@@ -12,6 +12,10 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.meetmewhere.databinding.FragmentEventCreationBinding
 import com.example.meetmewhere.databinding.FragmentEventsBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +26,7 @@ class EventCreationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var db: AppDatabase
+    private lateinit var auth: FirebaseAuth
     private var event: Events? = null // To hold the event when editing
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,9 @@ class EventCreationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val username = getUsername()
+        binding.tvWelcomeMessage.text = "Welcome ${username}"
 
         binding.edtDate.setOnClickListener{
             showDatePicker()
@@ -162,6 +170,17 @@ private fun updateEvent(event: Events, title: String, desc: String, date: String
         }
     }
 }
+
+    private fun getUsername(): String? {
+        auth = Firebase.auth
+        val user = auth.currentUser
+
+        if (user != null){
+            val username = user.displayName
+            return username
+        }
+        return null
+    }
 
 
 }
